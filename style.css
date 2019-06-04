@@ -1,0 +1,155 @@
+h1 {
+  text-align: center;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  margin-right: 5vw;
+  letter-spacing: 0.4vw;
+}
+
+.logo {
+  width: 30%;
+  height: auto;
+}
+
+h5 {
+  float: right;
+  font-size: 4vw;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  text-align: center;
+  margin-right: 2vw;
+  margin-top: 1vh;
+}
+
+body {
+  background-image: url("court.png");
+  background-size: 100% auto;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+#basketball {
+  width: 35%;
+  height: auto;
+  float: left;
+  margin-top: auto;
+  margin-left: auto;
+  margin-bottom: auto;
+}
+
+#character-images {
+  display: flex;
+  justify-content: space-between;
+  height: 21vh;
+}
+
+.player-img {
+  width: 10vw;
+  height: auto;
+  margin-left: 1.5vw;
+  margin-right: 1.5vw;
+  margin-top: 0vh;
+  margin-bottom: 0vh;
+}
+
+.image-padding {
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  float: left;
+  padding-top: 0.4vw;
+  padding-bottom: 0.4vw;
+  line-height: 1.3em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+.green-padding {
+  background-color: darkblue;
+}
+
+.red-padding {
+  background-color: darkred;
+}
+
+.black-padding {
+  background-color: black;
+}
+
+.green-font {
+  color: #ffffff;
+}
+
+.red-font {
+  color: white;
+}
+
+.black-font {
+  color: white;
+}
+
+#instructions {
+  float: left;
+  width: 100%;
+  text-align: center;
+  margin-top: 15vh;
+  margin-bottom: 3vh;
+  font-size: 4vw;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+#battlefield {
+  display: flex;
+  justify-content: space-between;
+}
+
+#your-character,
+#opponent {
+  width: 50%;
+}
+
+h4 {
+  text-align: center;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 4vw;
+  color: lightgrey;
+}
+
+#your-character-img {
+  float: left;
+  margin-left: 24%;
+}
+
+#opponent-img {
+  float: right;
+  margin-right: 24%;
+}
+
+#your-hp,
+#opponent-hp {
+  font-weight: 600;
+  font-size: 1.6vw;
+  float: right;
+}
+
+@-webkit-keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.blink {
+  -webkit-animation-name: blink;
+  -webkit-animation-duration: 2.5s;
+  -webkit-animation-direction: normal;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-iteration-count: infinite;
+}

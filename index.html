@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>RPG Game</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="reset.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <script>
+      var characterId;
+      var opponentId;
+      var characterChosen = false;
+      var opponentChosen = false;
+      var opponentsLeft;
+      var characterHealth;
+      var opponentHealth;
+      var characterBaseAttack;
+      var characterAttack;
+      var opponentAttack;
+      var timesClicked = 0;
+      var emptiedImages = [];
+
+      function resetGame() {
+        $("#your-character-img").empty();
+        $("#opponent-img").empty();
+        emptiedImages.forEach(function(element, index) {
+          $("#character-images").append(element);
+        });
+
+        $(".image-padding").each(function() {
+          playerName = $(this).attr("id");
+          $("#" + playerName).removeClass("red-padding");
+          $("#" + playerName).addClass("green-padding option");
+          $("#stat-" + playerName).text("Overall: " + $(this).attr("attack"));
+          $("#hp-" + playerName).empty();
+          $("#character-images").append($(this));
+          $("#instructions").text("Choose your player");
+          $("#instructions").removeClass("green-font red-font");
+          $("#instructions").addClass("blink green-font");
+          characterChosen = false;
+          opponentChosen = false;
+          opponentsLeft = $(".image-padding").length - 1;
+          emptiedImages = [];
+          timesClicked = 0;
+        });
+
+        $(document).ready(gameplay);
+      }
+
+      function gameplay() {
+        $(".image-padding").each(function() {
+          playerName = $(this).attr("id");
+          $("#stat-" + playerName).text("Overall: " + $(this).attr("attack"));
+        });
+
+        opponentsLeft = $(".image-padding").length - 1;
+
+        var chooseCharacter = $(".option");
+        chooseCharacter.unbind("click");
+        chooseCharacter.on("click", function() {
+          if (characterChosen === false) {
+            characterId = $(this).attr("id");
+            $("#" + characterId).removeClass("option");
+            $("#your-character-img").append($("#" + characterId));
+            $("#instructions").text("Choose Opponent");
+            $("#instructions").removeClass("green-font");
+            $("#instructions").addClass("red-font");
+            $(".option").removeClass("green-padding");
+            $(".option").addClass("red-padding");
+            characterHealth = parseInt($("#" + characterId).attr("hp"));
+            characterBaseAttack = parseInt($("#" + characterId).attr("attack"));
+            characterAttack = characterBaseAttack;
+            characterChosen = true;
+            $("#hp-" + characterId).text("XP: " + characterHealth);
+
+            $(".option").each(function() {
+              playerName = $(this).attr("id");
+              $("#stat-" + playerName).text(
+                "Counter: " + $(this).attr("counter")
+              );
+            });
+          } else if (characterChosen === true && opponentChosen === false) {
+            opponentId = $(this).attr("id");
+            $("#" + opponentId).removeClass("option");
+            $("#opponent-img").append($("#" + opponentId));
+            $("#instructions").text("Click Basketball to Attack Opponent");
+            $("#instructions").removeClass("red-font");
+            $("#instructions").addClass("black-font");
+            $("#instructions").removeClass("blink");
+            opponentHealth = parseInt($("#" + opponentId).attr("hp"));
+            opponentAttack = parseInt($("#" + opponentId).attr("counter"));
+            $("#hp-" + opponentId).text("XP: " + opponentHealth);
+            opponentChosen = true;
+          } else {
+          }
+        });
+
+        var attackButton = $("#basketball");
+        attackButton.unbind("click");
+        attackButton.on("click", function() {
+          if (
+            opponentChosen === true &&
+            characterChosen === true &&
+            opponentHealth > 0 &&
+            characterHealth > 0
+          ) {
+            characterHealth = characterHealth - opponentAttack;
+            opponentHealth = opponentHealth - characterAttack;
+            $("#hp-" + characterId).text("XP: " + characterHealth);
+            $("#hp-" + opponentId).text("XP: " + opponentHealth);
+            timesClicked++;
+            characterAttack = characterBaseAttack * (timesClicked + 1);
+            $("#stat-" + characterId).text("Overall: " + characterAttack);
+
+            if (opponentHealth <= 0 && characterHealth > 0) {
+              opponentsLeft--;
+              emptiedImages.push($("#opponent-img").html());
+              var name = $("#" + opponentId).attr("name");
+              $("#opponent-img").empty();
+              $("#instructions").addClass("blink");
+              $("#instructions").removeClass("black-font");
+              if (opponentsLeft > 0) {
+                opponentChosen = false;
+                $("#instructions").text("You defeated " + name);
+                $("#instructions").append("<br>");
+                $("#instructions").append("Choose your next opponent");
+                $("#instructions").addClass("red-font");
+              } else {
+                $("#instructions").text("You are an NBA Champion");
+                $("#instructions").append("<br>");
+                $("#instructions").append("Game is resetting...");
+                $("#instructions").addClass("green-font");
+                emptiedImages.push($("#your-character-img").html());
+                setTimeout(resetGame, 5000);
+              }
+            }
+
+            if (characterHealth <= 0) {
+              emptiedImages.push($("#your-character-img").html());
+              emptiedImages.push($("#opponent-img").html());
+              $("#your-character-img").empty();
+              if (opponentHealth <= 0) $("#opponent-img").empty();
+              $("#instructions").addClass("blink");
+              $("#instructions").removeClass("black-font");
+              $("#instructions").addClass("red-font");
+              $("#instructions").text("Better luck next season");
+              $("#instructions").append("<br>");
+              $("#instructions").append("Game is resetting");
+              setTimeout(resetGame, 5000);
+            }
+          }
+        });
+      }
+
+      $(document).ready(gameplay);
+    </script>
+    <header>
+      <h1><img src="logo.png" alt="Logo" class="logo" /></h1>
+    </header>
+    <div class="row">
+      <div class="col-xs-3"></div>
+      <div id="content" class="col-xs-6">
+        <div id="character-images">
+          <div
+            class="image-padding green-padding option"
+            id="lebron"
+            attack="99"
+            counter="50"
+            hp="500"
+            name="The King"
+          >
+            <h2 class="player-name">Lebron James</h2>
+            <img src="lebron.png" alt="LeBron" class="player-img" />
+            <br />
+            <span id="stat-lebron"></span> <br />
+            <span id="hp-lebron"></span>
+          </div>
+          <div
+            class="image-padding green-padding option"
+            id="harden"
+            attack="97"
+            counter="35"
+            hp="500"
+            name="The Beard"
+          >
+            <h2 class="player-name">James Harden</h2>
+            <img src="harden.png" alt="Harden" class="player-img" />
+            <br />
+            <span id="stat-harden"></span> <br />
+            <span id="hp-harden"></span>
+          </div>
+          <div
+            class="image-padding green-padding option"
+            id="kemba"
+            attack="95"
+            counter="40"
+            hp="500"
+            name="Cardiac Kemba"
+          >
+            <h2 class="player-name">Kemba Walker</h2>
+            <img src="kemba.png" alt="Kemba" class="player-img" />
+            <br />
+            <span id="stat-kemba"></span> <br />
+            <span id="hp-kemba"></span>
+          </div>
+          <div
+            class="image-padding green-padding option"
+            id="steph"
+            attack="74"
+            counter="15"
+            hp="500"
+            name="Chef Curry"
+          >
+            <h2 class="player-name">Stephen Curry</h2>
+            <img src="curry.png" alt="Curry" class="player-img" />
+            <br />
+            <span id="stat-steph"></span> <br />
+            <span id="hp-steph"></span>
+          </div>
+        </div>
+        <h3 id="instructions" class="blink green-font">Choose your player</h3>
+      </div>
+      <div class="col-xs-3"></div>
+    </div>
+
+    <div class="row" id="bottom">
+      <div class="col-xs-3">
+        <img src="basketball.png" alt="basketball" id="basketball" />
+        <h5>Attack</h5>
+      </div>
+      <div class="col-xs-6" id="battlefield">
+        <div id="your-character">
+          <h4>Your Player</h4>
+          <div id="your-character-img"></div>
+        </div>
+        <div id="opponent">
+          <h4>Opponent</h4>
+          <div id="opponent-img"></div>
+        </div>
+      </div>
+      <div class="col-xs-3"></div>
+    </div>
+  </body>
+</html>
